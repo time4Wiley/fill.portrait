@@ -85,7 +85,7 @@ def calculate_final_for_x(cost, count, height, r, width, x0, n_decimals, result_
 
 def log_result(cost, good_x, m, n, p, n_decimals=2):
     string_format = "{:."+str(n_decimals)+"f}"
-    print(cost, '\t', string_format.format(good_x), '\t', m, '\t', n, '\t', "{:.2f}".format(p))
+    print(cost, '\t', string_format.format(good_x), '\t', m, '\t', n, '\t', string_format.format(p))
 
 
 def calculate_total_ratio(count, width, height, r, good_x):
