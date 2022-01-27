@@ -10,9 +10,13 @@ import math
 import pprint
 
 
+def get_max_x_for_m_n_in_box(width, height, m, n, r):
+    return min(width / m, height / (n * r))
+
+
 def test_fill_portrait():
     params = {
-        'count': 1000,
+        'count': 10,
         'r': 1.35,
         'width': 450,
         'height': 1200
@@ -26,7 +30,7 @@ def test_fill_portrait():
 
     print(x_max)
 
-    good_x = min(width / count, height / (count*r))
+    good_x = min(width / count, height / (count * r))
 
     bad_x = x_max + 1
 
@@ -36,7 +40,14 @@ def test_fill_portrait():
 
     print("---- Scanning... ------")
     print('\t'.join(['round', 'x', 'm', 'n', 'total_ratio']))
-    while abs(good_x - bad_x) > 0.01:
+
+    m_last = 1
+    m_current = count
+
+    n_last = 1
+    n_current = count
+
+    while abs(good_x - bad_x) > 0.0001 and abs(m_current - m_last) >= 1 and abs(n_current - n_last) >= 1:
         x = (good_x + bad_x) * 0.5
         m, n = calculate_m_n_for_x_with_r_in_box(width, height, x, r)
 
@@ -47,13 +58,23 @@ def test_fill_portrait():
             good_x = x
             p = calculate_total_ratio(count, width, height, r, good_x)
             log_result(cost, good_x, m, n, p)
+            m_last = m_current
+            m_current = m
+
+            n_last = n_current
+            n_current = n
             continue
         else:
             # this is a bad point
             bad_x = x
             pass
 
-    x0 = good_x
+    x0 = get_max_x_for_m_n_in_box(width, height, m_current, n_current, r)
+    calculate_final_for_x(cost, count, height, r, width, x0)
+    calculate_final_for_x(cost, count, height, r, width, good_x)
+
+
+def calculate_final_for_x(cost, count, height, r, width, x0):
     m0, n0 = calculate_m_n_for_x_with_r_in_box(width, height, x0, r)
     print('------------ Result ----------------')
     p0 = calculate_total_ratio(count, width, height, r, x0)
