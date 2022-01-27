@@ -47,7 +47,9 @@ def test_fill_portrait():
     n_last = 1
     n_current = count
 
-    while abs(good_x - bad_x) > 0.0001 and abs(m_current - m_last) >= 1 and abs(n_current - n_last) >= 1:
+    x_accuracy = 4
+
+    while abs(good_x - bad_x) > pow(0.1, x_accuracy) and abs(m_current - m_last) >= 1 and abs(n_current - n_last) >= 1:
         x = (good_x + bad_x) * 0.5
         m, n = calculate_m_n_for_x_with_r_in_box(width, height, x, r)
 
@@ -57,7 +59,7 @@ def test_fill_portrait():
             # this is a good point
             good_x = x
             p = calculate_total_ratio(count, width, height, r, good_x)
-            log_result(cost, good_x, m, n, p)
+            log_result(cost, good_x, m, n, p, n_decimals=x_accuracy)
             m_last = m_current
             m_current = m
 
@@ -70,19 +72,20 @@ def test_fill_portrait():
             pass
 
     x0 = get_max_x_for_m_n_in_box(width, height, m_current, n_current, r)
-    calculate_final_for_x(cost, count, height, r, width, x0)
-    calculate_final_for_x(cost, count, height, r, width, good_x)
+    calculate_final_for_x(cost, count, height, r, width, x0, x_accuracy)
+    calculate_final_for_x(cost, count, height, r, width, good_x, x_accuracy)
 
 
-def calculate_final_for_x(cost, count, height, r, width, x0):
+def calculate_final_for_x(cost, count, height, r, width, x0, n_decimals):
     m0, n0 = calculate_m_n_for_x_with_r_in_box(width, height, x0, r)
     print('------------ Result ----------------')
     p0 = calculate_total_ratio(count, width, height, r, x0)
-    log_result(cost, x0, m0, n0, p0)
+    log_result(cost, x0, m0, n0, p0, n_decimals)
 
 
-def log_result(cost, good_x, m, n, p):
-    print(cost, '\t', "{:.2f}".format(good_x), '\t', m, '\t', n, '\t', "{:.2f}".format(p))
+def log_result(cost, good_x, m, n, p, n_decimals=2):
+    string_format = "{:."+str(n_decimals)+"f}"
+    print(cost, '\t', string_format.format(good_x), '\t', m, '\t', n, '\t', "{:.2f}".format(p))
 
 
 def calculate_total_ratio(count, width, height, r, good_x):
