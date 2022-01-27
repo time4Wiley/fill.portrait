@@ -72,13 +72,13 @@ def test_fill_portrait():
             pass
 
     x0 = get_max_x_for_m_n_in_box(width, height, m_current, n_current, r)
-    calculate_final_for_x(cost, count, height, r, width, x0, x_accuracy)
-    calculate_final_for_x(cost, count, height, r, width, good_x, x_accuracy)
+    calculate_final_for_x(cost, count, height, r, width, x0, x_accuracy, "Converged m,n")
+    calculate_final_for_x(cost, count, height, r, width, good_x, x_accuracy, "Converged x")
 
 
-def calculate_final_for_x(cost, count, height, r, width, x0, n_decimals):
+def calculate_final_for_x(cost, count, height, r, width, x0, n_decimals, result_condition):
     m0, n0 = calculate_m_n_for_x_with_r_in_box(width, height, x0, r)
-    print('------------ Result ----------------')
+    print(f'------------ Result Based on {result_condition} ----------------')
     p0 = calculate_total_ratio(count, width, height, r, x0)
     log_result(cost, x0, m0, n0, p0, n_decimals)
 
