@@ -16,7 +16,7 @@ def get_max_x_for_m_n_in_box(width, height, m, n, r):
 
 def test_fill_portrait():
     params = {
-        'count': 100,
+        'count': 10000,
         'r': 1.25,
         'width': 450,
         'height': 1200
